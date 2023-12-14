@@ -16,27 +16,32 @@ function App() {
       fail = `${fail}Password must have at least 6 characters\n`;
     }
 
-    if (!/[A-Z]/.test(password)) {
-      fail = `${fail}Password must contain at least 1 capital letter\n`;
-    }
-
-    if (!/[a-z]/.test(password)) {
-      fail = `${fail}Password must contain at least 1 lowercase letter\n`;
-    }
-
-    if (!/\d/.test(password)) {
-      fail = `${fail}Password must contain at least 1 number\n`;
-    }
-
-    if (!/[!@#$%^&*()_+={[}\]|:;"'<,>.]/.test(password)) {
-      fail = `${fail}Password must contain at least 1 special character`;
-    }
+    fail = `${fail}${validateCharacters()}`;
 
     if (fail.length > 0) {
       setFailureMessage(fail);
     } else {
       setFailureMessage("Password valid");
     }
+  };
+
+  const validateCharacters = () => {
+    const checks = [/[A-Z]/, /[a-z]/, /\d/, /[!@#$%^&*()_+={[}\]|:;"'<,>.]/];
+    const failMessages = [
+      "Password must contain at least 1 capital letter\n",
+      "Password must contain at least 1 lowercase letter\n",
+      "Password must contain at least 1 number\n",
+      "Password must contain at least 1 special character",
+    ];
+    let failMessage = "";
+
+    checks.forEach((check, i) => {
+      if (!check.test(password)) {
+        failMessage = `${failMessage}${failMessages[i]}`;
+      }
+    });
+
+    return failMessage;
   };
 
   return (
